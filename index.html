@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atropur</title>
+</head>
+<body>
+    <h1>Atropur</h1>
+    <div id="console" onclick="document.querySelector('form input').focus()">
+        <div>
+            <br>
+            <!-- Log starts here -->
+        </div>
+        <form>
+            <input type="text" placeholder="...">
+        </form>
+    </div>
+</body>
+<script>
+    //Automatic page close if server not online
+    function check_if_online() {
+        fetch("/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                "data": {
+                    "type": "status",
+                    "desc": "Test if server is online"
+                }
+            })
+        }).then(response => {
+            if (!response.ok) {
+                console.log(response);
+            }
+            setTimeout(check_if_online, 5000);
+        }).catch(error => {
+            console.log(error);
+            window.close();
+        })
+    }
+    check_if_online();
+
+    //On command send
+    document.querySelector("form").onsubmit = function (e) {
+        const input = e.target.querySelector("input");
+        decode(input.value);
+        input.value = null;
+        e.preventDefault()
+    }
+
+    //Decode command
+    function decode(code) {
+        const parts_layer_0 = code.split(/[\s/]/);
+        const parts_layer_1 = [];
+        parts_layer_0.forEach(element => {
+            parts_layer_1.push(element.split(/[./]/));
+        });
+        fetch("/", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                "data": {
+                    "type": "command",
+                    "desc": "Give command to server",
+                    "value": parts_layer_1
+                }
+            })
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(response => {
+            log(response["data"]);
+            console.log(response["data"]);
+        })
+    }
+
+    //Write to log
+    function log(text) {
+        const log_div = document.querySelector("#console div");
+        const new_item = document.createElement("p");
+        new_item.innerText = text;
+        log_div.appendChild(new_item);
+    }
+</script>
+<style>
+#console {
+    background-color: black;
+    border-radius: 3px;
+    padding: 20px;
+    overflow: auto;
+    max-height: 90vh;
+}
+#console p {
+    margin: 0;
+}
+#console form {
+    width: 100%;
+    margin-top: 100px;
+}
+#console div {
+    color: white;
+}
+#console form input {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+#console form input:focus {
+    outline: none;
+}
+</style>
+</html>
