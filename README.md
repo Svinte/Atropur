@@ -1,10 +1,10 @@
 **What is Atropur?**
 
-Atropur is hacking tool used for bruteforcing ssh. Atropur is made to be easily setuped and fast way to bruteforse ssh connection to server.
+Atropur is hacking tool used for bruteforcing ssh. Atropur is made to be easily set up and fast way to bruteforse ssh connection to server.
 
 **What do I need to use Atropur?**
 
-Atropur needs windows or linux computer and python 3.0+ installed. All libraries needed will be installed by setup wisard.
+Atropur needs windows or linux computer and python 3.0+ installed. All libraries needed will be installed by setup wizard.
 
 **How is Atropur made?**
 
